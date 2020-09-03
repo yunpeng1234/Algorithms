@@ -6,8 +6,11 @@
 using namespace std;
 
 // assumes that numbers in number list are integers above 0.
-// iterates through number list, finding most efficient paths to all values up to target.
 // assumes the resulting vector need not be sorted.
+// methodology similar to knapsack problem but with vectors to store indices instead of bitsets
+// iterates through number list, then iterates through stored values to check for most efficient 
+// paths to all values up to target.
+// runtime of O(n * k) where n = length of number list, k = sum to reach
 vector<int> find_lowest_index_sum(vector<int> inputs, int target){
     int maxIndex = inputs.size();
     // storage stores vectors of indices, with index 0 containing the sum of the indices for comparison purposes.
@@ -24,6 +27,7 @@ vector<int> find_lowest_index_sum(vector<int> inputs, int target){
             if (jump <= target && storage[index][0] != -1){
                 // updates smallest set of indices to jumped position if necessary
                 if (storage[jump][0] > storage[index][0] + inputIndex || storage[jump][0] == -1){
+                    // cout << index << " + " << value << " : " << storage[jump][0] << " -> " << storage[index][0] << " + " << inputIndex << endl;
                     storage[jump] = storage[index];
                     storage[jump].push_back(inputIndex);
                     storage[jump][0] += inputIndex;
