@@ -20,7 +20,6 @@ int find_lowest_index_sum(vector<int> inputs, int target){
             if (jump <= target && storage[index] != -1){
                 //updates lowest index sum to given index
                 if (storage[jump] > storage[index] + inputIndex || storage[jump] == -1){
-                    //cout << storage[jump] << " -> " << storage[index] + inputIndex << endl;
                     storage[jump] = storage[index] + inputIndex;
                 }
             }
