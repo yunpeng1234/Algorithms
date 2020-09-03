@@ -3,13 +3,14 @@
 #include <vector>
 
 using namespace std;
-//assumes over small range, numbers above 0.
+
+// assumes that numbers in number list are integers above 0.
+// iterates through number list, finding most efficient paths to all values up to target.
 int find_lowest_index_sum(vector<int> inputs, int target){
     int maxIndex = inputs.size();
     vector<int> storage(target + 1, -1);
     storage[0] = 0;
-    int jump;
-    int value;
+    int jump, value;
 
     for (int inputIndex = 0; inputIndex  < maxIndex; inputIndex++){
         value = inputs[inputIndex];
@@ -25,12 +26,24 @@ int find_lowest_index_sum(vector<int> inputs, int target){
             }
         }
     }
+    
+    //returns -1 if unable to obtain target
     return storage[target];
 }
 
+//input format:
+//length of number list, n
+//n numbers
+//target sum to add up to
 int main(){
-    vector<int> a = {3,5,6,7};
-    int target = 7;
-    cout << find_lowest_index_sum(a, target) << endl;
+    int cases, input, target;
+    vector<int> inputs;
+    cin >> cases;
+    while(cases--){
+        cin >> input;
+        inputs.push_back(input);
+    }
+    cin >> target;
+    cout << find_lowest_index_sum(inputs, target) << endl;
     return 0;
 }
