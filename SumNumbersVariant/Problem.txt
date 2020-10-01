@@ -1,0 +1,43 @@
+Sums Problem
+
+Given an array of integers, return the smallest set of indices of numbers such that they add up to a target number. You may not use the same element twice.
+
+ 
+
+Examples:
+
+ 
+
+[1,2,6,3,17,82,23,234] -> 26
+
+Solution [3,6]
+
+ 
+
+[1,2,6,3,17,82,23,234] -> 40
+
+Solution [4,6]
+
+ 
+
+[1,2,6,3,17,82,23,234] -> 23
+
+Solution [6]
+
+ 
+
+This is not your standard coding kata. You are expected to:
+
+·       Complete the task in a single class/function
+
+·       Solve from first principles
+
+·       It needs to be human legible i.e. this is not a challenge to solve in the least amount of code/characters possible
+
+·       Write down all assumptions and limits that you have made (they have not been provided for a reason)
+
+·       Note down the methodology(ies) used to solve the problem
+
+·       You can submit more than 1 solution – one naïve and one more elaborate as a possibility
+
+·       You can use Java, Kotlin, C#, Javascript, Ruby, Python, C/C++, Clojure
