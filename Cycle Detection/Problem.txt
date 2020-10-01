@@ -1,0 +1,19 @@
+Given a function f and a starting value i,
+Write a function determineF(i, n, k) that returns true if a value k can 
+be found with n successive applications of f to i, and false otherwise.
+
+Constraints
+i < 1000000007
+k < 1000000007
+
+Example:
+
+def f(i):
+	return i * 4 % 5
+
+i = 1
+k = 3
+n = 1000
+
+# returns False
+
