@@ -1,0 +1,21 @@
+Given a K lists of N elements and an integer M, take 1 element Xi from each of the K lists 
+such that (X1 ** 2 + X2 ** 2 ... + Xk ** 2) % M is the maximum possible. Return the maximum
+sum possible.
+
+Constraints:
+1 <= K <= 7
+1 <= M < 1000
+1 <= N <= 7
+1 < Magnitude of each element in the list < 10**9
+
+Example:
+K = 3
+M = 188
+[2,5,4]
+[3,7,8,9]
+[5,5,7,8,9,10]
+
+(5**2 + 9 **2 + 9**2) % 188 = 187
+return 187
+
+
