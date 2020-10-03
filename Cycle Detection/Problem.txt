@@ -16,4 +16,14 @@ k = 3
 n = 1000
 
 # returns False
-
+#Temporary solution
+def determineF(f, i, n, k) :
+    val = i
+    for i in range(n) :
+        val = f(val)
+        print(val)
+        if val == k :
+            return True
+            break
+    else :
+        return False
