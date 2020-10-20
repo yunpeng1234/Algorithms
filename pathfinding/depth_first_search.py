@@ -1,82 +1,149 @@
 from math import sqrt,trunc
 
+#NOT ACTUALLY DJIKSTRAS its me best first search
+from math import sqrt,trunc
+import GUI_final
+
 class node(object):
-	def __init__(self, parent, coord):
+	def __init__(self, position, parent, h):
+		self.position = position
 		self.parent = parent
-		self.coord = coord
+		self.h = h
 
-	def __eq__(self, coord):
-		return self.coord == coord
+	def __add__(self, diff):
+		return(self.position[0] + diff[0], self.position[1] + diff[1])
+		
 
-	def __add__(self, coord):
-		return (self.coord[0] + coord[0], self.coord[1] + coord[1])
+	def __eq__(self, other):
+		return self.position == other
 
-class pathfinder(object):
-	def __init__(self, grid, start, end, walls, GUI = None):
-		self.START = node(None, start)
-		self.END = end
-		self.WALLS = walls
-		self.WIDTH = grid[0]
-		self.HEIGHT = grid[1]
-		self.closed = [self.START]
-		self.count = 1
+# def truncate(number):
+# 	return trunc(number*10)/10
 
-	def find_next(self):
-		while self.count > 0:
-			step = []
-			attempted_coord = (0,0)
-			for open_index in range(self.count):
-				current = self.closed[-(open_index + 1)]
-				for neighbour in [(-1,1), (0,1), (1,1), (-1,0), (1,0), (-1,-1), (0,-1), (1,-1)]:
-					if current + neighbour == self.END:
-						solved = self.pathtrace(current + neighbour, current)
-						return solved
-
-					attempted_coord = current + neighbour
-					if attempted_coord in self.WALLS \
-						or	attempted_coord in self.closed \
-						or (attempted_coord)[0] < 0 \
-						or (attempted_coord)[1] < 0 \
-						or (attempted_coord)[0] >= self.WIDTH or (attempted_coord)[1] >= self.HEIGHT:
-							continue
-					else:
-						newnode = node(current, current + neighbour)
-						step.append(newnode)
-
-			self.count = len(step)
-			self.closed += step
-
-	def pathtrace(self, neighbour, parent):
-		step = []
-		print("end\n{}".format(neighbour))
-		while parent:
-			for node in self.closed:
-				if parent == node:
-					step.insert(0, node.coord)
-					parent = node.parent
-					print("{}".format(node.coord))
-		print("start")
-		return step
+def pathtrace(current, closed_list):
+	pathlist = []
+	while current.parent != None:
+		pathlist.insert(0,current.position)
+		for node in closed_list:
+			if node == current.parent:
+				current = node
+	pathlist.insert(0,current.position)
+	strfy = "start"
+	for i in pathlist:
+		strfy+="=>({},{})".format(i[0],i[1])
+	strfy+="end"
+	print(strfy)
+	return pathlist
 
 
-a = pathfinder((20,20), (3, 3), (17, 12), 
-	[(5, 2), (5, 3), (6, 3), (6, 4), (7, 4), (7, 5), (8, 5), (8, 6), (9, 6), (9, 7), 
-	(10, 7), (10, 8), (11, 8), (11, 9), (12, 9), (12, 10), (13, 10), (13, 11), 
-	(14, 11), (14, 12), (15, 12), (15, 13), (16, 13), (16, 14), (14, 15), (13, 15), 
-	(12, 13), (11, 12), (11, 13), (10, 12), (10, 11), (9, 11), (9, 10), (8, 10), (8, 9), 
-	(7, 9), (7, 8), (6, 8), (6, 7), (5, 6), (5, 7), (4, 6), (4, 5), (3, 5), (11, 15), 
-	(12, 15), (10, 15), (9, 15), (9, 14), (8, 13), (8, 14), (7, 13), (7, 12), (6, 12), 
-	(6, 11), (5, 11), (5, 10), (4, 10), (4, 9), (3, 9), (3, 8), (2, 8), (2, 7), (5, 0), 
-	(6, 0), (4, 2), (2, 2), (3, 2), (7, 1), (7, 0), (8, 1), (8, 2), (9, 2), (9, 3), 
-	(10, 3), (10, 4), (11, 4), (11, 5), (12, 5), (12, 6), (13, 6), (13, 7), (14, 7), 
-	(14, 8), (15, 8), (15, 9), (16, 9), (16, 10), (17, 11), (17, 10), (16, 15), (17, 13), 
-	(18, 13), (18, 12), (18, 11), (10, 0), (11, 0), (11, 1), (12, 1), (12, 2), (13, 2), 
-	(13, 3), (14, 3), (14, 4), (15, 4), (15, 5), (16, 5), (16, 6), (17, 6), (17, 7), 
-	(18, 7), (18, 8), (19, 8), (19, 9), (0, 9), (0, 10), (1, 10), (1, 11), (2, 11), 
-	(2, 12), (3, 12), (3, 13), (4, 13), (4, 14), (5, 14), (5, 15), (6, 15), (6, 16), 
-	(7, 16), (7, 17), (8, 17), (8, 18), (9, 18), (9, 19), (10, 19), (19, 15), (18, 15), 
-	(18, 16), (18, 17), (17, 17), (16, 17), (15, 17), (14, 17), (13, 17), (12, 17), 
-	(12, 18), (11, 18), (11, 19)]
-)
+def disth(neighbour_pos, end):
+	# end = end.position
+	# return trunc((sqrt((neighbour_pos[0]-end[0])**2 + (neighbour_pos[1]-end[1])**2))*10)/10
+	end = end.position
+	end_x = end[0]
+	end_y = end[1]
+	n_x = neighbour_pos[0]
+	n_y = neighbour_pos[1]
 
-a.find_next()
+	x_diff = abs(end_x - n_x)
+	y_diff = abs(end_y - n_y)
+
+	if x_diff >= y_diff:
+		dist_h = (y_diff * 14) + (x_diff - y_diff) * 10
+		return dist_h/10
+	elif x_diff < y_diff:
+		dist_h = (x_diff * 14) + (y_diff - x_diff) * 10
+		return dist_h/10
+
+
+def roundoff(number):
+	down = trunc(number*10)/10
+	if number+0.05 > down+0.1:
+		return down+0.1
+	else:
+		return down
+
+def sortindex(open_list, neighbour_node):
+	if len(open_list) == 0:
+		return 0
+	f = neighbour_node.h
+	length = len(open_list)-1
+	high = open_list[-1].h
+	highindex = length
+	low = open_list[0].h
+	lowindex = 0
+	if f>high:
+		return highindex+1
+	if f<=low:
+		return 0
+	estimate = round(((f - low)/(high - low))*length)
+	if estimate == 0:
+		estimate = 1
+	if estimate >= len(open_list):
+		estimate = len(open_list)-1
+	print(len(open_list))
+	print(estimate)
+
+	front = open_list[estimate-1].h
+	back = open_list[estimate].h
+	crashcounter = 0
+	while front>f or back<f:
+		crashcounter+=1
+		if crashcounter >= 20:
+			for i in open_list:
+				print(i.h)
+			print(neighbour_node.h)
+			raise
+		#print("front = {},back = {}, f = {}".format(front,back,f))
+		if estimate == lowindex:
+			estimate += 1
+		if front>f:
+			high = front
+			highindex = estimate-1
+			length = estimate - lowindex -1
+			estimate = round(((f - low)/(high - low))*length+lowindex)
+			#print("$[{}]={},[{}] = {}, estimate[{}] = {}, length = {}".format(lowindex,low,highindex,high,estimate,f,length))
+			front = open_list[estimate-1].h
+			back = open_list[estimate].h
+		elif back<f:
+			low = back
+			lowindex = estimate
+			length = highindex - estimate
+			estimate = round(((f - low)/(high - low))*length+lowindex)
+			#print("#[{}]={},[{}] = {}, estimate[{}] = {}".format(lowindex,low,highindex,high,estimate,f))
+			front = open_list[estimate-1].h
+			back = open_list[estimate].h
+	return estimate
+
+
+
+def pathfinder(grid,start,end,wall,):
+	open_list = []
+	closed_list = []
+	start = node(start,None,0)
+	end = node(end,None,0)
+	open_list.append(start)
+	closed_list.append(end)
+	while len(open_list) != 0:
+		current = open_list[0]##remember to sort!
+		print("current node: ({},{})".format(current.position[0],current.position[1]))
+		del open_list[0]
+		closed_list.append(current)
+		for neighbour in [(-1,1), (0,1), (1,1), (-1,0), (1,0), (-1,-1), (0,-1), (1,-1)]:
+			neighbour_pos = current + neighbour
+			if neighbour_pos in wall or neighbour_pos[0]>grid[0]-1 or neighbour_pos[0]<0 or neighbour_pos[1]>grid[1]-1 or neighbour_pos[1]<0:
+				continue
+			if neighbour_pos in closed_list:
+				if neighbour_pos == end:
+					print("PATHFOUND")
+					return pathtrace(current, closed_list)
+				continue
+
+			print("calculating position ({},{})".format(neighbour_pos[0],neighbour_pos[1]))
+			neighbour_h = disth(neighbour_pos, end)
+			if neighbour_pos not in open_list:
+				h = neighbour_h
+				neighbour_node = node(neighbour_pos, current.position, neighbour_h)
+				index = sortindex(open_list, neighbour_node)
+				open_list.insert(index, neighbour_node)
+
